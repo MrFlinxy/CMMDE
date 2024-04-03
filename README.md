@@ -18,23 +18,7 @@ CMMDE is a set of tools based on Python for running computational jobs, as well 
 - Core developers: Aditya Wibawa Sakti, Atthar Luqman Ivansyah, Hasan Al Rasyid, Muhamad Abdulkadir Martoprawiro, Aulia Sukma Hutama
 - Contributors: Athiya Mahmud Hanna, Arifin, Daniel Sethio
 - Core reviewers: Rahmat Gunawan, Imam Siswanto, Parsaoran Siahaan, Nova Pratiwi Indriyani
-- Committed users: Yusthinus Thobias Male, Veliyana Londong, Mirella Fonda, Riyanto, Badra, Hilda, Rustaman, Edu
-
-CMMDE telah diluncurkan dan akan diikuti oleh serangkaian lokakarya:
-
-**Sabtu, 17 September 2022 (10:00 WIB):**</br>
-Penyiapan Server Komputasi</br>
-Tautan: [https://mki.ac/CMMD-server](https://mki.ac/CMMD-server)
-
-**Sabtu, 24 September 2022 (10:00 WIB):**</br>
-Workshop on Text-Based CMMDE</br>
-Tautan:  [https://mki.ac/CMMDE-text]( https://mki.ac/CMMDE-text) 
-
-**Sabtu, 1 Oktober 2022 (10:00 WIB):**</br>
-Workshop on Web-Based CMMDE</br>
-Tautan: [https://mki.ac/CMMDE-web]( https://mki.ac/CMMDE-web)
-
-Informasi lebih lanjut: cmmde@mki.or.id
+- Committed users: Yusthinus Thobias Male, Veliyana Londong, Mirella Fonda Maahury, Riyanto, Badra, Hilda, Rustaman, Edu
 
 ## Requirements
 Sebelum menginstall CMMDE, perhatikan bahwa anda harus terlebih dahulu menginstall `slurm` untuk mengatur pengiriman pekerjaan komputasi anda ke suatu sistem antrian. Salah satu metode yang paling mudah untuk menginstall `slurm` dapat ditemukan di [sini](https://drtailor.medium.com/how-to-setup-slurm-on-ubuntu-20-04-for-single-node-work-scheduling-6cc909574365). 
