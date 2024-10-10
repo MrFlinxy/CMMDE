@@ -2,9 +2,9 @@
 import sys
 import os
 import argparse
-from cmmde_orca import orca
-from cmmde_dcdftb import dcdftb
-from cmmde_dock import (
+from lib.cmmde_orca import orca
+from lib.cmmde_dcdftb import dcdftb
+from lib.cmmde_dock import (
     readpdb,
     splitpdb,
     addH,
@@ -20,11 +20,11 @@ from cmmde_dock import (
     checkopt,
     multiflexdock,
 )
-from cmmde_mdpro import proprep, ligprep
-from cmmde_dftb import poscar2gen, vasp2gen, dftb
-from cmmde_qe import qe
-from cmmde_nw import nwchem
-from cmmde_xtb import xtb
+from lib.cmmde_mdpro import proprep, ligprep
+from lib.cmmde_dftb import poscar2gen, vasp2gen, dftb
+from lib.cmmde_qe import qe
+from lib.cmmde_nw import nwchem
+from lib.cmmde_xtb import xtb
 import time
 
 

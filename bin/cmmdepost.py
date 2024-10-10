@@ -12,9 +12,9 @@ from prettytable import PrettyTable
 matplotlib.use("PS")
 # matplotlib.rc('text', usetex=True)
 # matplotlib.use('Qt5agg')
-from cmmde_msd_com import msd_com, msd_fit
-from cmmde_rdf import rdf
-from cmmde_dock import checkopt
+from lib.cmmde_msd_com import msd_com, msd_fit
+from lib.cmmde_rdf import rdf
+from lib.cmmde_dock import checkopt
 
 parser = argparse.ArgumentParser(
     description="Program Analisis Hasil Perhitungan Dalam MOWS CMMD 2021"

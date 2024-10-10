@@ -2,16 +2,16 @@
 import os
 import argparse
 import sys
-from cmmde_dftb import xyz2gen
+from lib.cmmde_dftb import xyz2gen
 import numpy as np
-from cmmde_surface import surface
-from cmmde_formats import read, write
-from cmmde_dftb import xyz2gen
-from cmmde_tools import sort
-from cmmde_decahedron import Decahedron
-from cmmde_icosahedron import Icosahedron
-from cmmde_tetrahedron import Tetrahedron
-from cmmde_cubic import FaceCenteredCubic, SimpleCubic, BodyCenteredCubic
+from lib.cmmde_surface import surface
+from lib.cmmde_formats import read, write
+from lib.cmmde_dftb import xyz2gen
+from lib.cmmde_tools import sort
+from lib.cmmde_decahedron import Decahedron
+from lib.cmmde_icosahedron import Icosahedron
+from lib.cmmde_tetrahedron import Tetrahedron
+from lib.cmmde_cubic import FaceCenteredCubic, SimpleCubic, BodyCenteredCubic
 import pymatgen.analysis.adsorption as pa
 import pymatgen.core.structure as st
 from pymatgen.core import Structure
@@ -142,7 +142,7 @@ obabel {} -O geom.xyz""".format(
         )
         os.system("sbatch run_babel.sh")
 if opt.job == "gen2poscar":
-    from cmmde_gen2poscar import gen2poscar
+    from lib.cmmde_gen2poscar import gen2poscar
 
     gen2poscar(opt.input)
 
@@ -230,7 +230,7 @@ if opt.job == "surface":
         c2,
         c3,
     )
-    from cmmde_gen2poscar import gen2poscar
+    from lib.cmmde_gen2poscar import gen2poscar
 
     gen2poscar("in.gen")
     os.system("mv in.vasp slab_{}{}{}.vasp".format(hkl[0], hkl[1], hkl[2]))
