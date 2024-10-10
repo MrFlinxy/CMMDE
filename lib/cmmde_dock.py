@@ -26,6 +26,7 @@ def readpdb(geom):
 
 def splitpdb(geom, ligname):
     ligand = []
+    protein = []  # placeholders for protein
     with open(geom, "r") as f:
         for line in f:
             if line.startswith("ATOM" or "TER"):

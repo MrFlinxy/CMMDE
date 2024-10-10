@@ -22,7 +22,7 @@ def msd_com(groups, traject, start, latt, dt):
             print(
                 "Salah memasukkan format definisi molekul, pastikan dengan format     Nama*JumlahAtom*JumlahMolekul"
             )
-            parser.print_help()
+            # parser.print_help() # uncomment this line later
             sys.exit(1)
         index_groups.append((arr[0], int(arr[1]), int(arr[2])))
     # print(index_groups)

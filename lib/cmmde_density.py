@@ -13,6 +13,7 @@ def density(geom):
                 a2 = float(arr[2])
                 a3 = float(arr[3])
     V = a1 * a2 * a3 * 10**-24  # Volume dalam cm^3
+    mass = 0  # Placeholder for mass
     dens = mass / V  # Massa jenis dalam g/cm^3
 
     print("Density = {}".format(dens))
