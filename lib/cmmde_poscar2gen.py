@@ -3,7 +3,7 @@ def poscar2gen(input):
     vx = []
     vy = []
     vz = []
-    with open(input, 'r') as f:
+    with open(input, "r") as f:
         next(f)
         next(f)
         for i in range(3):

@@ -1,9 +1,18 @@
 import numpy as np
 
 
-def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
-        origo=(0, 0, 0), nlayers=None, extend=1.0, tolerance=0.01,
-        maxatoms=None):
+def cut(
+    atoms,
+    a=(1, 0, 0),
+    b=(0, 1, 0),
+    c=None,
+    clength=None,
+    origo=(0, 0, 0),
+    nlayers=None,
+    extend=1.0,
+    tolerance=0.01,
+    maxatoms=None,
+):
     """Cuts out a cell defined by *a*, *b*, *c* and *origo* from a
     sufficiently repeated copy of *atoms*.
 
@@ -108,7 +117,7 @@ def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
     origo = np.array(origo, dtype=float)
 
     scaled = (atoms.get_scaled_positions() - origo) % 1.0
-    scaled %= 1.0   # needed to ensure that all numbers are *less* than one
+    scaled %= 1.0  # needed to ensure that all numbers are *less* than one
     atoms.set_scaled_positions(scaled)
 
     if isinstance(a, int):
@@ -125,15 +134,14 @@ def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
         vol = np.sqrt(np.linalg.det(metric))
         h = np.cross(a, b)
         H = np.linalg.solve(metric.T, h.T)
-        c = vol * H / vol**(1. / 3.)
+        c = vol * H / vol ** (1.0 / 3.0)
     c = np.array(c, dtype=float)
 
     if nlayers:
         # Recursive increase the length of c until we have at least
         # *nlayers* atomic layers parallel to the a-b plane
         while True:
-            at = cut(atoms, a, b, c, origo=origo, extend=extend,
-                     tolerance=tolerance)
+            at = cut(atoms, a, b, c, origo=origo, extend=extend, tolerance=tolerance)
             scaled = at.get_scaled_positions()
             d = scaled[:, 2]
             keys = np.argsort(d)
@@ -143,8 +151,7 @@ def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
                 mask = np.concatenate(([True], np.diff(d[keys]) > tol))
                 tags = np.cumsum(mask)[ikeys] - 1
                 levels = d[keys][mask]
-                if (maxatoms is None or len(at) < maxatoms or
-                    len(levels) > nlayers):
+                if maxatoms is None or len(at) < maxatoms or len(levels) > nlayers:
                     break
                 tol *= 0.9
             if len(levels) > nlayers:
@@ -160,13 +167,21 @@ def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
 
     # Create a new atoms object, repeated and translated such that
     # it completely covers the new cell
-    scorners_newcell = np.array([[0., 0., 0.], [0., 0., 1.],
-                                 [0., 1., 0.], [0., 1., 1.],
-                                 [1., 0., 0.], [1., 0., 1.],
-                                 [1., 1., 0.], [1., 1., 1.]])
+    scorners_newcell = np.array(
+        [
+            [0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 1.0, 1.0],
+            [1.0, 0.0, 0.0],
+            [1.0, 0.0, 1.0],
+            [1.0, 1.0, 0.0],
+            [1.0, 1.0, 1.0],
+        ]
+    )
     corners = np.dot(scorners_newcell, newcell * extend)
     scorners = np.linalg.solve(cell.T, corners.T).T
-    rep = np.ceil(scorners.ptp(axis=0)).astype('int') + 1
+    rep = np.ceil(scorners.ptp(axis=0)).astype("int") + 1
     trans = np.dot(np.floor(scorners.min(axis=0)), cell)
     atoms = atoms.repeat(rep)
     atoms.translate(trans)
@@ -184,12 +199,21 @@ def cut(atoms, a=(1, 0, 0), b=(0, 1, 0), c=None, clength=None,
 class IncompatibleCellError(ValueError):
     """Exception raised if stacking fails due to incompatible cells
     between *atoms1* and *atoms2*."""
+
     pass
 
 
-def stack(atoms1, atoms2, axis=2, cell=None, fix=0.5,
-          maxstrain=0.5, distance=None, reorder=False,
-          output_strained=False):
+def stack(
+    atoms1,
+    atoms2,
+    axis=2,
+    cell=None,
+    fix=0.5,
+    maxstrain=0.5,
+    distance=None,
+    reorder=False,
+    output_strained=False,
+):
     """Return a new Atoms instance with *atoms2* stacked on top of
     *atoms1* along the given axis. Periodicity in all directions is
     ensured.
@@ -258,10 +282,10 @@ def stack(atoms1, atoms2, axis=2, cell=None, fix=0.5,
         if not atoms.cell[axis].any():
             atoms.center(vacuum=0.0, axis=axis)
 
-    if (np.sign(np.linalg.det(atoms1.cell)) !=
-        np.sign(np.linalg.det(atoms2.cell))):
-        raise IncompatibleCellError('Cells of *atoms1* and *atoms2* must have '
-                                    'same handedness.')
+    if np.sign(np.linalg.det(atoms1.cell)) != np.sign(np.linalg.det(atoms2.cell)):
+        raise IncompatibleCellError(
+            "Cells of *atoms1* and *atoms2* must have " "same handedness."
+        )
 
     c1 = np.linalg.norm(atoms1.cell[axis])
     c2 = np.linalg.norm(atoms2.cell[axis])
@@ -278,12 +302,13 @@ def stack(atoms1, atoms2, axis=2, cell=None, fix=0.5,
     cell2[axis] *= c2
 
     if maxstrain:
-        strain1 = np.sqrt(((cell1 - atoms1.cell).sum(axis=0)**2).sum())
-        strain2 = np.sqrt(((cell2 - atoms2.cell).sum(axis=0)**2).sum())
+        strain1 = np.sqrt(((cell1 - atoms1.cell).sum(axis=0) ** 2).sum())
+        strain2 = np.sqrt(((cell2 - atoms2.cell).sum(axis=0) ** 2).sum())
         if strain1 > maxstrain or strain2 > maxstrain:
             raise IncompatibleCellError(
-                '*maxstrain* exceeded. *atoms1* strained %f and '
-                '*atoms2* strained %f.' % (strain1, strain2))
+                "*maxstrain* exceeded. *atoms1* strained %f and "
+                "*atoms2* strained %f." % (strain1, strain2)
+            )
 
     atoms1.set_cell(cell1, scale_atoms=True)
     atoms2.set_cell(cell2, scale_atoms=True)
@@ -299,7 +324,7 @@ def stack(atoms1, atoms2, axis=2, cell=None, fix=0.5,
             n2 = len(pos2)
             idx1 = np.arange(n1).repeat(n2)
             idx2 = np.tile(np.arange(n2), n1)
-            return np.sqrt(((pos1[idx1] - pos2[idx2])**2).sum(axis=1).min())
+            return np.sqrt(((pos1[idx1] - pos2[idx2]) ** 2).sum(axis=1).min())
 
         def func(x):
             t1, t2, h1, h2 = x[0:3], x[3:6], x[6], x[7]
@@ -307,7 +332,7 @@ def stack(atoms1, atoms2, axis=2, cell=None, fix=0.5,
             pos2 = atoms2.positions + t2
             d1 = mindist(pos1, pos2 + (h1 + 1.0) * atoms1.cell[axis])
             d2 = mindist(pos2, pos1 + (h2 + 1.0) * atoms2.cell[axis])
-            return (d1 - distance)**2 + (d2 - distance)**2
+            return (d1 - distance) ** 2 + (d2 - distance) ** 2
 
         atoms1.center()
         atoms2.center()
@@ -343,17 +368,17 @@ def rotation_matrix(a1, a2, b1, b2):
     a1 = np.asarray(a1, dtype=float) / np.linalg.norm(a1)
     b1 = np.asarray(b1, dtype=float) / np.linalg.norm(b1)
     c1 = np.cross(a1, b1)
-    c1 /= np.linalg.norm(c1)      # clean out rounding errors...
+    c1 /= np.linalg.norm(c1)  # clean out rounding errors...
 
     a2 = np.asarray(a2, dtype=float) / np.linalg.norm(a2)
     b2 = np.asarray(b2, dtype=float) / np.linalg.norm(b2)
     c2 = np.cross(a2, b2)
-    c2 /= np.linalg.norm(c2)      # clean out rounding errors...
+    c2 /= np.linalg.norm(c2)  # clean out rounding errors...
 
     # Calculate rotated *b2*
     theta = np.arccos(np.dot(a2, b2)) - np.arccos(np.dot(a1, b1))
     b3 = np.sin(theta) * a2 + np.cos(theta) * b2
-    b3 /= np.linalg.norm(b3)      # clean out rounding errors...
+    b3 /= np.linalg.norm(b3)  # clean out rounding errors...
 
     A1 = np.array([a1, b1, c1])
     A2 = np.array([a2, b3, c2])
@@ -373,7 +398,7 @@ def rotate(atoms, a1, a2, b1, b2, rotate_cell=True, center=(0, 0, 0)):
     will rotate the atoms out of the cell, even if *rotate_cell* is
     True.
     """
-    if isinstance(center, str) and center.lower() == 'com':
+    if isinstance(center, str) and center.lower() == "com":
         center = atoms.get_center_of_mass()
 
     R = rotation_matrix(a1, a2, b1, b2)
@@ -395,18 +420,19 @@ def minimize_tilt_ij(atoms, modified=1, fixed=0, fold_atoms=True):
     i = fixed
     j = modified
     if not (pbc_c[i] and pbc_c[j]):
-        raise RuntimeError('Axes have to be periodic')
+        raise RuntimeError("Axes have to be periodic")
 
     prod_cc = np.dot(orgcell_cc, orgcell_cc.T)
-    cell_cc = 1. * orgcell_cc
-    nji = np.floor(- prod_cc[i, j] / prod_cc[i, i] + 0.5)
+    cell_cc = 1.0 * orgcell_cc
+    nji = np.floor(-prod_cc[i, j] / prod_cc[i, i] + 0.5)
     cell_cc[j] = orgcell_cc[j] + nji * cell_cc[i]
 
     # sanity check
     def volume(cell):
         return np.abs(np.dot(cell[2], np.cross(cell[0], cell[1])))
+
     V = volume(cell_cc)
-    assert(abs(volume(orgcell_cc) - V) / V < 1.e-10)
+    assert abs(volume(orgcell_cc) - V) / V < 1.0e-10
 
     atoms.set_cell(cell_cc)
 
@@ -419,7 +445,7 @@ def minimize_tilt(atoms, order=range(3), fold_atoms=True):
     pbc_c = atoms.get_pbc()
 
     for i1, c1 in enumerate(order):
-        for c2 in order[i1 + 1:]:
+        for c2 in order[i1 + 1 :]:
             if pbc_c[c1] and pbc_c[c2]:
                 minimize_tilt_ij(atoms, c1, c2, fold_atoms)
 
@@ -429,7 +455,7 @@ def niggli_reduce_cell(cell, epsfactor=None):
 
     if epsfactor is None:
         epsfactor = 1e-5
-    eps = epsfactor * abs(np.linalg.det(cell))**(1./3.)
+    eps = epsfactor * abs(np.linalg.det(cell)) ** (1.0 / 3.0)
 
     cell = np.asarray(cell)
 
@@ -459,21 +485,19 @@ def niggli_reduce_cell(cell, epsfactor=None):
         return not (lt(x, y, eps) or gt(x, y, eps))
 
     for _ in range(10000):
-        if (gt(g[0], g[1])
-                or (eq(g[0], g[1]) and gt(abs(g[3]), abs(g[4])))):
+        if gt(g[0], g[1]) or (eq(g[0], g[1]) and gt(abs(g[3]), abs(g[4]))):
             C = np.dot(C, -I3[[1, 0, 2]])
             D = np.dot(I6[[1, 0, 2, 4, 3, 5]], D)
             g = np.dot(D, g0)
             continue
-        elif (gt(g[1], g[2])
-                or (eq(g[1], g[2]) and gt(abs(g[4]), abs(g[5])))):
+        elif gt(g[1], g[2]) or (eq(g[1], g[2]) and gt(abs(g[4]), abs(g[5]))):
             C = np.dot(C, -I3[[0, 2, 1]])
             D = np.dot(I6[[0, 2, 1, 3, 5, 4]], D)
             g = np.dot(D, g0)
             continue
 
-        lmn = np.array(gt(g[3:], 0, eps=eps/2), dtype=int)
-        lmn -= np.array(lt(g[3:], 0, eps=eps/2), dtype=int)
+        lmn = np.array(gt(g[3:], 0, eps=eps / 2), dtype=int)
+        lmn -= np.array(lt(g[3:], 0, eps=eps / 2), dtype=int)
 
         if lmn.prod() == 1:
             ijk = lmn.copy()
@@ -499,9 +523,11 @@ def niggli_reduce_cell(cell, epsfactor=None):
         D[5] *= ijk[0] * ijk[1]
         g = np.dot(D, g0)
 
-        if (gt(abs(g[3]), g[1])
-                or (eq(g[3], g[1]) and lt(2 * g[4], g[5]))
-                or (eq(g[3], -g[1]) and lt(g[5], 0))):
+        if (
+            gt(abs(g[3]), g[1])
+            or (eq(g[3], g[1]) and lt(2 * g[4], g[5]))
+            or (eq(g[3], -g[1]) and lt(g[5], 0))
+        ):
             s = int(np.sign(g[3]))
 
             A = I3.copy()
@@ -515,9 +541,11 @@ def niggli_reduce_cell(cell, epsfactor=None):
             B[4, 5] = -s
             D = np.dot(B, D)
             g = np.dot(D, g0)
-        elif (gt(abs(g[4]), g[0])
-                or (eq(g[4], g[0]) and lt(2 * g[3], g[5]))
-                or (eq(g[4], -g[0]) and lt(g[5], 0))):
+        elif (
+            gt(abs(g[4]), g[0])
+            or (eq(g[4], g[0]) and lt(2 * g[3], g[5]))
+            or (eq(g[4], -g[0]) and lt(g[5], 0))
+        ):
             s = int(np.sign(g[4]))
 
             A = I3.copy()
@@ -531,9 +559,11 @@ def niggli_reduce_cell(cell, epsfactor=None):
             B[4, 0] = -2 * s
             D = np.dot(B, D)
             g = np.dot(D, g0)
-        elif (gt(abs(g[5]), g[0])
-                or (eq(g[5], g[0]) and lt(2 * g[3], g[4]))
-                or (eq(g[5], -g[0]) and lt(g[4], 0))):
+        elif (
+            gt(abs(g[5]), g[0])
+            or (eq(g[5], g[0]) and lt(2 * g[3], g[4]))
+            or (eq(g[5], -g[0]) and lt(g[4], 0))
+        ):
             s = int(np.sign(g[5]))
 
             A = I3.copy()
@@ -547,9 +577,9 @@ def niggli_reduce_cell(cell, epsfactor=None):
             B[5, 0] = -2 * s
             D = np.dot(B, D)
             g = np.dot(D, g0)
-        elif (lt(g[[0, 1, 3, 4, 5]].sum(), 0)
-                or (eq(g[[0, 1, 3, 4, 5]].sum(), 0)
-                    and gt(2 * (g[0] + g[4]) + g[5], 0))):
+        elif lt(g[[0, 1, 3, 4, 5]].sum(), 0) or (
+            eq(g[[0, 1, 3, 4, 5]].sum(), 0) and gt(2 * (g[0] + g[4]) + g[5], 0)
+        ):
             A = I3.copy()
             A[:, 2] = 1
             C = np.dot(C, A)
@@ -565,18 +595,18 @@ def niggli_reduce_cell(cell, epsfactor=None):
         else:
             break
     else:
-        raise RuntimeError('Niggli reduction not done in 10000 steps!\n'
-                           'cell={}\n'
-                           'operation={}'
-                           .format(cell.tolist(), C.tolist()))
+        raise RuntimeError(
+            "Niggli reduction not done in 10000 steps!\n"
+            "cell={}\n"
+            "operation={}".format(cell.tolist(), C.tolist())
+        )
 
     abc = np.sqrt(g[:3])
     # Prevent division by zero e.g. for cell==zeros((3, 3)):
     abcprod = max(abc.prod(), 1e-100)
     cosangles = abc * g[3:] / (2 * abcprod)
     angles = 180 * np.arccos(cosangles) / np.pi
-    newcell = np.array(cellpar_to_cell(np.concatenate([abc, angles])),
-                       dtype=float)
+    newcell = np.array(cellpar_to_cell(np.concatenate([abc, angles])), dtype=float)
 
     return newcell, C
 
@@ -610,7 +640,7 @@ def niggli_reduce(atoms):
     2004, A60, 1-6.
     """
 
-    assert all(atoms.pbc), 'Can only reduce 3d periodic unit cells!'
+    assert all(atoms.pbc), "Can only reduce 3d periodic unit cells!"
     new_cell, op = niggli_reduce_cell(atoms.cell)
     update_cell_and_positions(atoms, new_cell, op)
 
@@ -623,6 +653,7 @@ def reduce_lattice(atoms, eps=2e-4):
     physically equivalent.  The eps parameter is used as a tolerance
     for determining the cell's Bravais lattice."""
     from ase.geometry.bravais_type_engine import identify_lattice
+
     niggli_reduce(atoms)
     lat, op = identify_lattice(atoms.cell, eps=eps)
     update_cell_and_positions(atoms, lat.tocell(), np.linalg.inv(op))
