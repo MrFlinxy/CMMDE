@@ -252,7 +252,7 @@ def cmmde_gui():
 
         TextArea.value = TextArea.value + "\n" + "Mempersiapkan Struktur 3 Dimensi!"
         list_commands = [
-            "cmmde.py",
+            "/home/dimas/cmmde_dir/CMMDE/bin/cmmde.py",
             "-i",
             "{}".format(geom),
             "-s",
