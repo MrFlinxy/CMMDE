@@ -10,10 +10,10 @@ from operator import itemgetter
 
 import numpy as np
 
-from cmmde_unit import Atom
-from cmmde_atoms import Atoms
-from cmmde_data import reference_states, atomic_numbers
-from cmmde_cubic import FaceCenteredCubic
+from .cmmde_unit import Atom
+from .cmmde_atoms import Atoms
+from .cmmde_data import reference_states, atomic_numbers
+from .cmmde_cubic import FaceCenteredCubic
 
 
 def fcc100(symbol, size, a=None, vacuum=None, orthogonal=True, periodic=False):

@@ -2,16 +2,16 @@
 import os
 import argparse
 import sys
-from lib.cmmde_dftb import xyz2gen
+from cmmde_dftb import xyz2gen
 import numpy as np
-from lib.cmmde_surface import surface
-from lib.cmmde_formats import read, write
-from lib.cmmde_dftb import xyz2gen
-from lib.cmmde_tools import sort
-from lib.cmmde_decahedron import Decahedron
-from lib.cmmde_icosahedron import Icosahedron
-from lib.cmmde_tetrahedron import Tetrahedron
-from lib.cmmde_cubic import FaceCenteredCubic, SimpleCubic, BodyCenteredCubic
+from cmmde_surface import surface
+from cmmde_formats import read, write
+from cmmde_dftb import xyz2gen
+from cmmde_tools import sort
+from cmmde_decahedron import Decahedron
+from cmmde_icosahedron import Icosahedron
+from cmmde_tetrahedron import Tetrahedron
+from cmmde_cubic import FaceCenteredCubic, SimpleCubic, BodyCenteredCubic
 import pymatgen.analysis.adsorption as pa
 import pymatgen.core.structure as st
 from pymatgen.core import Structure
