@@ -275,6 +275,7 @@ def cmmde_gui():
             for i in new_commands:
                 list_commands.append(i)
         cmd = subprocess.run(list_commands, capture_output=True, text=True)
+        print(cmd)
         # terminal.subprocess.run("cmmde.py","-i{}".format(editor.value),"-s{}".format(software[software_main.value]), "-j{}".format(jobs), "-m{}".format(method[method_btn.value]))
         TextArea.value = TextArea.value + "\n" + "Perhitungan anda telah tersubmit!"
 
